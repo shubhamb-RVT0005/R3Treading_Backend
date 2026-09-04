@@ -1,0 +1,5 @@
+package com.r3vtech.clientOTP;
+
+public class OtpServiceClient {
+
+}

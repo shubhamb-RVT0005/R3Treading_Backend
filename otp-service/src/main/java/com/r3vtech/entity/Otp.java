@@ -1,0 +1,180 @@
+package com.r3vtech.entity;
+
+//public class Otp {
+//
+//}
+//package com.r3vtech.otp.entity;
+
+//import com.r3vtech.otp.enums.OtpType;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+
+import java.time.LocalDateTime;
+
+import com.r3vtech.enums.OtpType;
+
+@Entity
+@Table(name = "otp")
+public class Otp {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "user_id", nullable = false, length = 50)
+    private String userId;
+
+    @Column(name = "otp", nullable = false, length = 10)
+    private String otp;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "otp_type", nullable = false, length = 20)
+    private OtpType otpType;
+
+    @Column(name = "destination", nullable = false, length = 150)
+    private String destination;
+
+    @Column(name = "expires_at", nullable = false)
+    private LocalDateTime expiresAt;
+
+    @Column(name = "verified", nullable = false)
+    private Boolean verified = false;
+
+    @Column(name = "attempts", nullable = false)
+    private Integer attempts = 0;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "verified_at")
+    private LocalDateTime verifiedAt;
+
+
+    // ==========================================
+    // Before Insert
+    // ==========================================
+
+    @PrePersist
+    protected void onCreate() {
+
+        if (this.verified == null) {
+            this.verified = false;
+        }
+
+        if (this.attempts == null) {
+            this.attempts = 0;
+        }
+
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+
+        // OTP valid for exactly 1 minute
+        if (this.expiresAt == null) {
+            this.expiresAt =
+                    this.createdAt.plusMinutes(1);
+        }
+    }
+
+
+    // ==========================================
+    // Getters and Setters
+    // ==========================================
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
+
+
+    public OtpType getOtpType() {
+        return otpType;
+    }
+
+    public void setOtpType(OtpType otpType) {
+        this.otpType = otpType;
+    }
+
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+
+    public LocalDateTime getExpiresAt() {
+        return expiresAt;
+    }
+
+    public void setExpiresAt(LocalDateTime expiresAt) {
+        this.expiresAt = expiresAt;
+    }
+
+
+    public Boolean getVerified() {
+        return verified;
+    }
+
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
+    }
+
+
+    public Integer getAttempts() {
+        return attempts;
+    }
+
+    public void setAttempts(Integer attempts) {
+        this.attempts = attempts;
+    }
+
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+
+    public LocalDateTime getVerifiedAt() {
+        return verifiedAt;
+    }
+
+    public void setVerifiedAt(LocalDateTime verifiedAt) {
+        this.verifiedAt = verifiedAt;
+    }
+}

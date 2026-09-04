@@ -1,0 +1,46 @@
+package com.r3vtech.clientOTP;
+
+//public class OtpServiceClient {
+//
+//}
+//package com.r3treading.auth.client;
+
+import com.r3treading.auth.dto.ApiResponse;
+import com.r3treading.auth.dto.VerifyOtpRequest;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+@FeignClient(name = "otp-service")
+public interface OtpServiceClient {
+
+    @PostMapping("/otp/generate/mobile")
+    ApiResponse<?> generateMobileOtp(
+            @RequestBody VerifyOtpRequest request
+    );
+
+    @PostMapping("/otp/generate/email")
+    ApiResponse<?> generateEmailOtp(
+            @RequestBody VerifyOtpRequest request
+    );
+
+    @PostMapping("/otp/verify/mobile")
+    ApiResponse<?> verifyMobileOtp(
+            @RequestBody VerifyOtpRequest request
+    );
+
+    @PostMapping("/otp/verify/email")
+    ApiResponse<?> verifyEmailOtp(
+            @RequestBody VerifyOtpRequest request
+    );
+
+    @PostMapping("/otp/resend/mobile")
+    ApiResponse<?> resendMobileOtp(
+            @RequestBody VerifyOtpRequest request
+    );
+
+    @PostMapping("/otp/resend/email")
+    ApiResponse<?> resendEmailOtp(
+            @RequestBody VerifyOtpRequest request
+    );
+}

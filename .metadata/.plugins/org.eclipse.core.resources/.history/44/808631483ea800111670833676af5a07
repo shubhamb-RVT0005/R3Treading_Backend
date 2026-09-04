@@ -1,0 +1,5 @@
+package com.r3vtech.entityDTO;
+
+public class RegisterRequest {
+
+}

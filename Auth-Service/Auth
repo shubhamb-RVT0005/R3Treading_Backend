@@ -1,0 +1,133 @@
+Your Auth Service now exposes:
+
+Method	API	Purpose
+POST	/auth/register	Register client
+POST	/auth/verify-mobile	Verify mobile OTP
+POST	/auth/verify-email	Verify email OTP
+POST	/auth/resend-mobile-otp/{userId}	Resend mobile OTP
+POST	/auth/resend-email-otp/{userId}	Resend email OTP
+POST	/auth/login	Login and receive JWT
+Registration
+
+Angular sends:
+
+{
+  "firstName": "Shubham",
+  "middleName": "Raj",
+  "lastName": "Bonde",
+  "mobile": "9876543210",
+  "email": "shubham@gmail.com",
+  "tradingPlatformId": 101,
+  "password": "Password@123"
+}
+
+Then:
+
+Angular
+   ↓
+POST /auth/register
+   ↓
+AuthController
+   ↓
+AuthService
+   ↓
+Save User
+   ↓
+PENDING_VERIFICATION
+   ↓
+OTP Service
+   ↓
+Mobile OTP
+Mobile verification
+POST /auth/verify-mobile
+
+{
+    "userId": "USR-XXXXXXXX",
+    "otp": "123456"
+}
+
+After successful verification:
+
+mobileVerified = true
+status = MOBILE_VERIFIED
+
+Then Auth Service requests the email OTP.
+
+Email verification
+POST /auth/verify-email
+
+{
+    "userId": "USR-XXXXXXXX",
+    "otp": "654321"
+}
+
+After successful verification:
+
+mobileVerified = true
+emailVerified  = true
+status         = ACTIVE
+
+Then the user is allowed to login.
+
+Login
+POST /auth/login
+{
+    "email": "shubham@gmail.com",
+    "password": "Password@123"
+}
+
+Response:
+
+{
+    "success": true,
+    "message": "Login successful",
+    "data": {
+        "accessToken": "eyJhbGciOiJIUzI1NiJ9...",
+        "refreshToken": null,
+        "tokenType": "Bearer",
+        "expiresIn": 3600
+    }
+}
+One dependency
+
+Because AuthController uses:
+
+@Valid
+
+make sure your pom.xml has:
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-validation</artifactId>
+</dependency>
+
+At this point the Auth Service Java layer is essentially complete:
+
+com.r3vtech
+├── clientOTP
+│   └── OtpServiceClient.java
+├── controller
+│   └── AuthController.java       ✅
+├── entity
+│   └── User.java
+├── entityDTO
+│   ├── RegisterRequest.java
+│   ├── RegisterResponse.java
+│   ├── LoginRequest.java
+│   ├── LoginResponse.java
+│   ├── VerifyOtpRequest.java
+│   ├── GenerateOtpRequest.java
+│   └── ApiResponse.java
+├── enums
+│   ├── OtpType.java
+│   └── UserStatus.java
+├── repository
+│   └── UserRepository.java
+├── security
+│   ├── JwtAuthenticationFilter.java
+│   └── SecurityConfig.java
+└── service
+    ├── AuthService.java
+    └── JwtService.java
+
+Next, we should fix/check the OtpServiceClient.java against this AuthService, because that is the connection between Auth Service and your OTP Service.

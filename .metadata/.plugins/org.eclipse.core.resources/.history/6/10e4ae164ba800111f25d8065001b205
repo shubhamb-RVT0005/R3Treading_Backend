@@ -1,0 +1,5 @@
+package com.r3vtech.Controller;
+
+public class AuthController {
+
+}

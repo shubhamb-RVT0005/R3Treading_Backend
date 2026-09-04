@@ -1,0 +1,329 @@
+package com.r3vtech.service;
+
+//public class OtpService {
+//
+//}
+//package com.r3vtech.otp.service;
+
+import com.r3vtech.otp.client.NotificationServiceClient;
+import com.r3vtech.otp.dto.GenerateOtpRequest;
+import com.r3vtech.otp.dto.OtpResponse;
+import com.r3vtech.otp.dto.VerifyOtpRequest;
+import com.r3vtech.otp.entity.Otp;
+import com.r3vtech.otp.enums.OtpType;
+import com.r3vtech.otp.repository.OtpRepository;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.concurrent.ThreadLocalRandom;
+
+@Service
+public class OtpService {
+
+    private static final int OTP_LENGTH = 6;
+    private static final int OTP_EXPIRY_MINUTES = 1;
+    private static final int MAX_ATTEMPTS = 5;
+
+    private final OtpRepository otpRepository;
+    private final NotificationServiceClient notificationServiceClient;
+
+    public OtpService(
+            OtpRepository otpRepository,
+            NotificationServiceClient notificationServiceClient) {
+
+        this.otpRepository = otpRepository;
+        this.notificationServiceClient = notificationServiceClient;
+    }
+
+    // =========================================================
+    // GENERATE MOBILE OTP
+    // =========================================================
+
+    @Transactional
+    public OtpResponse generateMobileOtp(GenerateOtpRequest request) {
+
+        request.setOtpType(OtpType.MOBILE);
+
+        return generateOtp(request);
+    }
+
+    // =========================================================
+    // GENERATE EMAIL OTP
+    // =========================================================
+
+    @Transactional
+    public OtpResponse generateEmailOtp(GenerateOtpRequest request) {
+
+        request.setOtpType(OtpType.EMAIL);
+
+        return generateOtp(request);
+    }
+
+    // =========================================================
+    // GENERATE OTP
+    // =========================================================
+
+    private OtpResponse generateOtp(GenerateOtpRequest request) {
+
+        // Delete previous unverified OTP
+        otpRepository.deleteByUserIdAndOtpTypeAndVerifiedFalse(
+                request.getUserId(),
+                request.getOtpType()
+        );
+
+        // Generate 6 digit OTP
+        String otpCode = generateSixDigitOtp();
+
+        // Create OTP entity
+        Otp otp = new Otp();
+
+        otp.setUserId(request.getUserId());
+        otp.setOtp(otpCode);
+        otp.setOtpType(request.getOtpType());
+        otp.setDestination(request.getDestination());
+
+        LocalDateTime now = LocalDateTime.now();
+
+        otp.setCreatedAt(now);
+        otp.setExpiresAt(now.plusMinutes(OTP_EXPIRY_MINUTES));
+
+        otp.setVerified(false);
+        otp.setAttempts(0);
+
+        otpRepository.save(otp);
+
+        // Send OTP
+        boolean notificationSent;
+
+        if (request.getOtpType() == OtpType.MOBILE) {
+
+            notificationSent = sendMobileOtp(
+                    request.getDestination(),
+                    otpCode
+            );
+
+        } else {
+
+            notificationSent = sendEmailOtp(
+                    request.getDestination(),
+                    otpCode
+            );
+        }
+
+        if (!notificationSent) {
+
+            return new OtpResponse(
+                    false,
+                    "Failed to send OTP",
+                    request.getUserId(),
+                    request.getOtpType().name()
+            );
+        }
+
+        return new OtpResponse(
+                true,
+                "OTP sent successfully",
+                request.getUserId(),
+                request.getOtpType().name()
+        );
+    }
+
+    // =========================================================
+    // VERIFY MOBILE OTP
+    // =========================================================
+
+    @Transactional
+    public OtpResponse verifyMobileOtp(VerifyOtpRequest request) {
+
+        request.setOtpType(OtpType.MOBILE);
+
+        return verifyOtp(request);
+    }
+
+    // =========================================================
+    // VERIFY EMAIL OTP
+    // =========================================================
+
+    @Transactional
+    public OtpResponse verifyEmailOtp(VerifyOtpRequest request) {
+
+        request.setOtpType(OtpType.EMAIL);
+
+        return verifyOtp(request);
+    }
+
+    // =========================================================
+    // VERIFY OTP
+    // =========================================================
+
+    private OtpResponse verifyOtp(VerifyOtpRequest request) {
+
+        Otp otp = otpRepository
+                .findTopByUserIdAndOtpTypeAndVerifiedFalseOrderByCreatedAtDesc(
+                        request.getUserId(),
+                        request.getOtpType()
+                )
+                .orElse(null);
+
+        if (otp == null) {
+
+            return new OtpResponse(
+                    false,
+                    "OTP not found or already verified",
+                    request.getUserId(),
+                    request.getOtpType().name()
+            );
+        }
+
+        // Check whether OTP is already expired
+        if (LocalDateTime.now().isAfter(otp.getExpiresAt())) {
+
+            return new OtpResponse(
+                    false,
+                    "OTP has expired. Please request a new OTP.",
+                    request.getUserId(),
+                    request.getOtpType().name()
+            );
+        }
+
+        // Check maximum attempts
+        if (otp.getAttempts() >= MAX_ATTEMPTS) {
+
+            return new OtpResponse(
+                    false,
+                    "Maximum OTP verification attempts exceeded. Please request a new OTP.",
+                    request.getUserId(),
+                    request.getOtpType().name()
+            );
+        }
+
+        // Increase attempt count
+        otp.setAttempts(otp.getAttempts() + 1);
+
+        // Check OTP
+        if (!otp.getOtp().equals(request.getOtp())) {
+
+            otpRepository.save(otp);
+
+            return new OtpResponse(
+                    false,
+                    "Invalid OTP",
+                    request.getUserId(),
+                    request.getOtpType().name()
+            );
+        }
+
+        // OTP verified successfully
+        otp.setVerified(true);
+        otp.setVerifiedAt(LocalDateTime.now());
+
+        otpRepository.save(otp);
+
+        return new OtpResponse(
+                true,
+                "OTP verified successfully",
+                request.getUserId(),
+                request.getOtpType().name()
+        );
+    }
+
+    // =========================================================
+    // RESEND MOBILE OTP
+    // =========================================================
+
+    @Transactional
+    public OtpResponse resendMobileOtp(GenerateOtpRequest request) {
+
+        request.setOtpType(OtpType.MOBILE);
+
+        return generateOtp(request);
+    }
+
+    // =========================================================
+    // RESEND EMAIL OTP
+    // =========================================================
+
+    @Transactional
+    public OtpResponse resendEmailOtp(GenerateOtpRequest request) {
+
+        request.setOtpType(OtpType.EMAIL);
+
+        return generateOtp(request);
+    }
+
+    // =========================================================
+    // GENERATE 6 DIGIT OTP
+    // =========================================================
+
+    private String generateSixDigitOtp() {
+
+        int otpNumber = ThreadLocalRandom.current()
+                .nextInt(100000, 1000000);
+
+        return String.valueOf(otpNumber);
+    }
+
+    // =========================================================
+    // SEND MOBILE OTP
+    // =========================================================
+
+    private boolean sendMobileOtp(
+            String mobile,
+            String otpCode) {
+
+        String message =
+                "Your R3Treading OTP is "
+                + otpCode
+                + ". This OTP is valid for 1 minute.";
+
+        try {
+
+            OtpResponse response =
+                    notificationServiceClient.sendSms(
+                            mobile,
+                            message
+                    );
+
+            return response != null && response.isSuccess();
+
+        } catch (Exception e) {
+
+            return false;
+        }
+    }
+
+    // =========================================================
+    // SEND EMAIL OTP
+    // =========================================================
+
+    private boolean sendEmailOtp(
+            String email,
+            String otpCode) {
+
+        String subject =
+                "R3Treading Email Verification OTP";
+
+        String message =
+                "Your R3Treading OTP is "
+                + otpCode
+                + ". This OTP is valid for 1 minute.";
+
+        try {
+
+            OtpResponse response =
+                    notificationServiceClient.sendEmail(
+                            email,
+                            subject,
+                            message
+                    );
+
+            return response != null && response.isSuccess();
+
+        } catch (Exception e) {
+
+            return false;
+        }
+    }
+}

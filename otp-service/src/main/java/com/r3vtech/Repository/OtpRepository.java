@@ -1,0 +1,33 @@
+package com.r3vtech.Repository;
+
+//public interface OtpRepository {
+//
+//}
+//package com.r3vtech.otp.repository;
+//
+//import com.r3vtech.otp.entity.Otp;
+//import com.r3vtech.otp.enums.OtpType;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.r3vtech.entity.Otp;
+import com.r3vtech.enums.OtpType;
+
+import java.util.Optional;
+
+public interface OtpRepository extends JpaRepository<Otp, Long> {
+
+    Optional<Otp> findTopByUserIdAndOtpTypeAndVerifiedFalseOrderByCreatedAtDesc(
+            String userId,
+            OtpType otpType
+    );
+
+    Optional<Otp> findTopByUserIdAndOtpTypeOrderByCreatedAtDesc(
+            String userId,
+            OtpType otpType
+    );
+
+    void deleteByUserIdAndOtpTypeAndVerifiedFalse(
+            String userId,
+            OtpType otpType
+    );
+}

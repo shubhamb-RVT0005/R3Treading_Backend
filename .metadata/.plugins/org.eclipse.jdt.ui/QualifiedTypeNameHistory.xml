@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="com.r3vtech.enums.UserStatus"/>
+    <fullyQualifiedTypeName name="com.r3vtech.entity.User"/>
+    <fullyQualifiedTypeName name="com.r3vtech.entityDTO.ApiResponse"/>
+    <fullyQualifiedTypeName name="com.r3vtech.entityDTO.VerifyOtpRequest"/>
+    <fullyQualifiedTypeName name="com.r3vtech.entityDTO.GenerateOtpRequest"/>
+    <fullyQualifiedTypeName name="com.r3vtech.service.JwtService"/>
+    <fullyQualifiedTypeName name="org.springframework.cloud.openfeign.FeignClient"/>
+    <fullyQualifiedTypeName name="com.r3vtech.Repository.OtpRepository"/>
+    <fullyQualifiedTypeName name="com.r3vtech.client.NotificationServiceClient"/>
+    <fullyQualifiedTypeName name="com.r3vtech.enums.OtpType"/>
+    <fullyQualifiedTypeName name="com.r3vtech.entity.Otp"/>
+    <fullyQualifiedTypeName name="com.r3vtech.service.OtpService"/>
+    <fullyQualifiedTypeName name="com.r3vtech.dto.OtpResponse"/>
+    <fullyQualifiedTypeName name="com.r3vtech.dto.GenerateOtpRequest"/>
+    <fullyQualifiedTypeName name="com.r3vtech.dto.VerifyOtpRequest"/>
+    <fullyQualifiedTypeName name="com.r3vtech.repository.NotificationLogRepository"/>
+    <fullyQualifiedTypeName name="com.r3vtech.dto.NotificationResponse"/>
+    <fullyQualifiedTypeName name="com.r3vtech.dto.SmsRequest"/>
+    <fullyQualifiedTypeName name="com.r3vtech.entity.NotificationLog"/>
+    <fullyQualifiedTypeName name="com.r3vtech.enums.NotificationType"/>
+    <fullyQualifiedTypeName name="com.r3vtech.dto.EmailRequest"/>
+</qualifiedTypeNameHistroy>
