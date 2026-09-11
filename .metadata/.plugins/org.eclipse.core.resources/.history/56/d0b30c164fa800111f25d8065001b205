@@ -1,5 +1,0 @@
-package com.r3vtech.Repository;
-
-public interface OtpRepository {
-
-}

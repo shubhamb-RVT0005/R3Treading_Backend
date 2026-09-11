@@ -1,0 +1,107 @@
+package com.r3vision.serviceimpl;
+
+public class NotificationService {
+
+}
+
+
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+
+
+@Service
+public class NotificationService {
+
+  private final NotificationLogRepository notificationLogRepository;
+  private final JavaMailSender mailSender;
+
+  public NotificationService(
+          NotificationLogRepository notificationLogRepository,
+          JavaMailSender mailSender) {
+
+      this.notificationLogRepository = notificationLogRepository;
+      this.mailSender = mailSender;
+  }
+
+  @Transactional
+  public NotificationResponse sendEmail(EmailRequest request) {
+
+      try {
+
+          System.out.println("=================================");
+          System.out.println("EMAIL NOTIFICATION");
+          System.out.println("Email   : " + request.getTo());
+          System.out.println("Subject : " + request.getSubject());
+          System.out.println("Message : " + request.getMessage());
+          System.out.println("=================================");
+
+          // Create email
+          SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+          mailMessage.setTo(request.getTo());
+          mailMessage.setSubject(request.getSubject());
+          mailMessage.setText(request.getMessage());
+
+          // IMPORTANT:
+          // Use the injected mailSender object
+          mailSender.send(mailMessage);
+
+          System.out.println("EMAIL SENT SUCCESSFULLY");
+
+          // Save successful notification log
+          NotificationLog log = new NotificationLog();
+
+          log.setNotificationType(NotificationType.EMAIL);
+          log.setDestination(request.getTo());
+          log.setSubject(request.getSubject());
+          log.setMessage(request.getMessage());
+          log.setStatus("SENT");
+
+          notificationLogRepository.save(log);
+
+          return new NotificationResponse(
+                  true,
+                  "Email sent successfully"
+          );
+
+      } catch (Exception e) {
+
+          e.printStackTrace();
+
+          saveFailedLog(
+                  NotificationType.EMAIL,
+                  request.getTo(),
+                  request.getSubject(),
+                  request.getMessage(),
+                  e.getMessage()
+          );
+
+          return new NotificationResponse(
+                  false,
+                  "Failed to send email: " + e.getMessage()
+          );
+      }
+  }
+
+  private void saveFailedLog(
+          NotificationType type,
+          String destination,
+          String subject,
+          String message,
+          String errorMessage) {
+
+      NotificationLog log = new NotificationLog();
+
+      log.setNotificationType(type);
+      log.setDestination(destination);
+      log.setSubject(subject);
+      log.setMessage(message);
+      log.setStatus("FAILED");
+      log.setErrorMessage(errorMessage);
+
+      notificationLogRepository.save(log);
+  }
+}

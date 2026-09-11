@@ -1,0 +1,61 @@
+package com.r3vtech.entityDTO;
+
+public class UserProfileResponse {
+
+    private String userId;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String mobile;
+
+    private Long tradingPlatformId;
+    private String tradingPlatform;
+
+
+    public UserProfileResponse(
+            String userId,
+            String firstName,
+            String lastName,
+            String email,
+            String mobile,
+            Long tradingPlatformId,
+            String tradingPlatform) {
+
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.mobile = mobile;
+        this.tradingPlatformId = tradingPlatformId;
+        this.tradingPlatform = tradingPlatform;
+    }
+
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public Long getTradingPlatformId() {
+        return tradingPlatformId;
+    }
+
+    public String getTradingPlatform() {
+        return tradingPlatform;
+    }
+}

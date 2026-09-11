@@ -1,627 +1,566 @@
 package com.r3vtech.service;
 
-//public class AuthService {
-//
-//}
-//package com.r3vtech.service;
-
-import com.r3vtech.clientOTP.OtpServiceClient;
-import com.r3vtech.entity.User;
-import com.r3vtech.entityDTO.ApiResponse;
-import com.r3vtech.entityDTO.GenerateOtpRequest;
-import com.r3vtech.entityDTO.LoginRequest;
-import com.r3vtech.entityDTO.LoginResponse;
-import com.r3vtech.entityDTO.RegisterRequest;
-import com.r3vtech.entityDTO.RegisterResponse;
-import com.r3vtech.entityDTO.VerifyOtpRequest;
-import com.r3vtech.enums.OtpType;
-import com.r3vtech.enums.UserStatus;
-import com.r3vtech.repository.UserRepository;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.r3vtech.client.NotificationClient;
+import com.r3vtech.entity.User;
+import com.r3vtech.entityDTO.ApiResponse;
+import com.r3vtech.entityDTO.LoginRequest;
+import com.r3vtech.entityDTO.LoginResponse;
+import com.r3vtech.entityDTO.RegisterRequest;
+import com.r3vtech.entityDTO.RegisterResponse;
+import com.r3vtech.entityDTO.UserProfileResponse;
+import com.r3vtech.repository.UserRepository;
+
 @Service
 public class AuthService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
-    private final OtpServiceClient otpServiceClient;
+//develop By Shubham Bonde 
+private final UserRepository userRepository;
+private final PasswordEncoder passwordEncoder;
+private final JwtService jwtService;
+private final NotificationClient notificationClient;
 
+public AuthService(
+        UserRepository userRepository,
+        PasswordEncoder passwordEncoder,
+        JwtService jwtService,
+        NotificationClient notificationClient) {
 
-    public AuthService(
-            UserRepository userRepository,
-            PasswordEncoder passwordEncoder,
-            JwtService jwtService,
-            OtpServiceClient otpServiceClient) {
+    this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
+    this.jwtService = jwtService;
+    this.notificationClient = notificationClient;
+}
 
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtService = jwtService;
-        this.otpServiceClient = otpServiceClient;
-    }
+// =====================================================
+// REGISTER
+// =====================================================
 
+@Transactional
+public ApiResponse<RegisterResponse> register(
+        RegisterRequest request) {
 
     // =====================================================
-    // REGISTER
+    // 1. Create User
     // =====================================================
 
-    @Transactional
-    public ApiResponse<RegisterResponse> register(
-            RegisterRequest request) {
+    User user = new User();
 
-        // Check duplicate email
-        if (userRepository.existsByEmail(request.getEmail())) {
+    user.setFirstName(request.getFirstName());
+    user.setMiddleName(request.getMiddleName());
+    user.setLastName(request.getLastName());
+    user.setMobile(request.getMobile());
+    user.setEmail(request.getEmail());
 
-            return new ApiResponse<>(
-                    false,
-                    "Email is already registered",
-                    null
-            );
-        }
+    // Never store plain password
+    user.setPasswordHash(
+            passwordEncoder.encode(request.getPassword())
+    );
 
+    user.setTradingPlatformId(
+            request.getTradingPlatformId()
+    );
 
-        // Check duplicate mobile
-        if (userRepository.existsByMobile(request.getMobile())) {
+    user.setMobileVerified(false);
+    user.setEmailVerified(false);
 
-            return new ApiResponse<>(
-                    false,
-                    "Mobile number is already registered",
-                    null
-            );
-        }
+    // =====================================================
+    // 2. Save User
+    // =====================================================
 
+    User savedUser = userRepository.save(user);
 
-        // Create User
-        User user = new User();
+    // =====================================================
+    // 3. Get Trading Platform Name
+    // =====================================================
 
-        user.setFirstName(request.getFirstName());
-        user.setMiddleName(request.getMiddleName());
-        user.setLastName(request.getLastName());
-        user.setMobile(request.getMobile());
-        user.setEmail(request.getEmail());
-
-        // IMPORTANT:
-        // Never store plain password
-        user.setPasswordHash(
-                passwordEncoder.encode(request.getPassword())
-        );
-
-        user.setTradingPlatformId(
-                request.getTradingPlatformId()
-        );
-
-        user.setMobileVerified(false);
-        user.setEmailVerified(false);
-
-        user.setStatus(
-                UserStatus.PENDING_VERIFICATION
-        );
-
-
-        // Save User
-        User savedUser = userRepository.save(user);
-
-
-        // ================================================
-        // Generate Mobile OTP
-        // ================================================
-
-        GenerateOtpRequest otpRequest =
-                new GenerateOtpRequest();
-
-        otpRequest.setUserId(
-                savedUser.getUserId()
-        );
-
-        otpRequest.setDestination(
-                savedUser.getMobile()
-        );
-
-        otpRequest.setOtpType(
-                OtpType.MOBILE
-        );
-
-
-        try {
-
-            otpServiceClient.generateMobileOtp(
-                    otpRequest
+    // Helper method called here
+    String tradingPlatform =
+            getTradingPlatformName(
+                    savedUser.getTradingPlatformId()
             );
 
-        } catch (Exception e) {
+    // =====================================================
+    // 4. Send Registration Email
+    // =====================================================
 
-            return new ApiResponse<>(
-                    false,
-                    "User registered but mobile OTP could not be sent",
-                    null
-            );
-        }
+    try {
 
+        String emailBody = String.format(
+                """
+                Welcome To R3-Trading...!
 
-        // ================================================
-        // Registration Response
-        // ================================================
+                Your account has been Created Successfully.
 
-        RegisterResponse response =
-                new RegisterResponse(
-                        savedUser.getUserId(),
-                        savedUser.getMobile(),
-                        savedUser.getEmail(),
-                        "Registration initiated. Mobile OTP sent."
-                );
+                -------------------------------------------------
+                User Information :
+                -------------------------------------------------
 
+                ID                  : %d
+                User ID             : %s
+                First Name          : %s
+                Middle Name         : %s
+                Last Name           : %s
+                Mobile              : %s
+                Email               : %s
+                Trading Platform ID : %d
+                Trading Platform    : %s
 
-        return new ApiResponse<>(
-                true,
-                "Registration initiated. Mobile OTP sent.",
-                response
+                ------------------------------------------------
+
+                Thank you for registering with R3-Trading.
+
+                Regards,
+                R3-Trading Team
+                """,
+
+                savedUser.getId(),
+                savedUser.getUserId(),
+                savedUser.getFirstName(),
+                savedUser.getMiddleName(),
+                savedUser.getLastName(),
+                savedUser.getMobile(),
+                savedUser.getEmail(),
+                savedUser.getTradingPlatformId(),
+                tradingPlatform
+        );
+
+        notificationClient.sendEmail(
+                savedUser.getEmail(),
+                "R3 Trading - Registration Successful",
+                emailBody
+        );
+
+    } catch (Exception e) {
+
+        System.err.println(
+                "Notification-Service error: "
+                        + e.getMessage()
         );
     }
 
 
+//------------------------------------------------------------------
+//
+// try {
+//
+// notificationClient.sendEmail(
+// savedUser.getEmail(),
+// "Registration Successful",
+// "Welcome! Your account has been created successfully."
+// );
+//
+// } catch (Exception e) {
+//
+// // Do not fail registration just because
+// // Notification-Service is temporarily unavailable.
+//
+// System.err.println(
+// "Notification-Service error: "
+// + e.getMessage()
+// );
+// }
+
     // =====================================================
-    // VERIFY MOBILE OTP
+    // 5. Registration Response
     // =====================================================
 
-    @Transactional
-    public ApiResponse<?> verifyMobileOtp(
-            VerifyOtpRequest request) {
-
-        User user = userRepository
-                .findByUserId(request.getUserId())
-                .orElse(null);
-
-
-        if (user == null) {
-
-            return new ApiResponse<>(
-                    false,
-                    "User not found",
-                    null
-            );
-        }
-
-
-        if (user.getMobileVerified()) {
-
-            return new ApiResponse<>(
-                    false,
-                    "Mobile number is already verified",
-                    null
-            );
-        }
-
-
-        ApiResponse<?> otpResponse;
-
-        try {
-
-            otpResponse =
-                    otpServiceClient.verifyMobileOtp(
-                            request
-                    );
-
-        } catch (Exception e) {
-
-            return new ApiResponse<>(
-                    false,
-                    "Unable to verify mobile OTP",
-                    null
-            );
-        }
-
-
-        if (otpResponse == null
-                || !otpResponse.isSuccess()) {
-
-            String message =
-                    otpResponse != null
-                            ? otpResponse.getMessage()
-                            : "Invalid mobile OTP";
-
-            return new ApiResponse<>(
-                    false,
-                    message,
-                    null
-            );
-        }
-
-
-        // Mark mobile verified
-        user.setMobileVerified(true);
-
-        user.setStatus(
-                UserStatus.MOBILE_VERIFIED
-        );
-
-        userRepository.save(user);
-
-
-        // ================================================
-        // Generate Email OTP
-        // ================================================
-
-        GenerateOtpRequest emailOtpRequest =
-                new GenerateOtpRequest();
-
-        emailOtpRequest.setUserId(
-                user.getUserId()
-        );
-
-        emailOtpRequest.setDestination(
-                user.getEmail()
-        );
-
-        emailOtpRequest.setOtpType(
-                OtpType.EMAIL
-        );
-
-
-        try {
-
-            otpServiceClient.generateEmailOtp(
-                    emailOtpRequest
+    RegisterResponse response =
+            new RegisterResponse(
+                    savedUser.getUserId(),
+                    savedUser.getMobile(),
+                    savedUser.getEmail(),
+                    "Registration initiated."
             );
 
-        } catch (Exception e) {
+    return new ApiResponse<>(
+            true,
+            "Registration successful. Verification pending.",
+            response
+    );
+}
 
-            return new ApiResponse<>(
-                    true,
-                    "Mobile verified. Email OTP could not be sent.",
-                    null
-            );
-        }
+// =====================================================
+// LOGIN
+// =====================================================
 
+public ApiResponse<LoginResponse> login(
+        LoginRequest request) {
+
+    User user = userRepository
+            .findByEmail(request.getEmail())
+            .orElse(null);
+
+    // Check password
+    if (user == null ||
+            !passwordEncoder.matches(
+                    request.getPassword(),
+                    user.getPasswordHash())) {
 
         return new ApiResponse<>(
-                true,
-                "Mobile verified successfully. Email OTP sent.",
+                false,
+                "Invalid email or password",
                 null
         );
     }
 
-
-    // =====================================================
-    // VERIFY EMAIL OTP
-    // =====================================================
-
-    @Transactional
-    public ApiResponse<?> verifyEmailOtp(
-            VerifyOtpRequest request) {
-
-        User user = userRepository
-                .findByUserId(request.getUserId())
-                .orElse(null);
-
-
-        if (user == null) {
-
-            return new ApiResponse<>(
-                    false,
-                    "User not found",
-                    null
+    // Generate JWT
+    String accessToken =
+            jwtService.generateAccessToken(
+                    user.getUserId(),
+                    user.getEmail()
             );
-        }
 
-
-        if (!user.getMobileVerified()) {
-
-            return new ApiResponse<>(
-                    false,
-                    "Mobile number must be verified first",
-                    null
+    LoginResponse loginResponse =
+            new LoginResponse(
+                    accessToken,
+                    null,
+                    "Bearer",
+                    jwtService.getAccessTokenExpiration()
             );
-        }
 
+    return new ApiResponse<>(
+            true,
+            "Login successful",
+            loginResponse
+    );
+}
 
-        if (user.getEmailVerified()) {
+// =====================================================
+// GET CURRENT USER
+// =====================================================
 
-            return new ApiResponse<>(
-                    false,
-                    "Email is already verified",
-                    null
-            );
-        }
+public ApiResponse<UserProfileResponse> getCurrentUser(
+        String userId) {
 
+    User user = userRepository
+            .findByUserId(userId)
+            .orElse(null);
 
-        ApiResponse<?> otpResponse;
-
-        try {
-
-            otpResponse =
-                    otpServiceClient.verifyEmailOtp(
-                            request
-                    );
-
-        } catch (Exception e) {
-
-            return new ApiResponse<>(
-                    false,
-                    "Unable to verify email OTP",
-                    null
-            );
-        }
-
-
-        if (otpResponse == null
-                || !otpResponse.isSuccess()) {
-
-            String message =
-                    otpResponse != null
-                            ? otpResponse.getMessage()
-                            : "Invalid email OTP";
-
-            return new ApiResponse<>(
-                    false,
-                    message,
-                    null
-            );
-        }
-
-
-        // ================================================
-        // Mark Email Verified
-        // ================================================
-
-        user.setEmailVerified(true);
-
-        // Both verifications completed
-        user.setStatus(
-                UserStatus.ACTIVE
-        );
-
-        userRepository.save(user);
-
-
-        // ================================================
-        // Registration Completed
-        // ================================================
+    if (user == null) {
 
         return new ApiResponse<>(
-                true,
-                "Registration successfully completed",
+                false,
+                "User not found",
                 null
         );
     }
 
-
     // =====================================================
-    // RESEND MOBILE OTP
+    // Get Trading Platform Name
     // =====================================================
 
-    public ApiResponse<?> resendMobileOtp(
-            String userId) {
-
-        User user = userRepository
-                .findByUserId(userId)
-                .orElse(null);
-
-
-        if (user == null) {
-
-            return new ApiResponse<>(
-                    false,
-                    "User not found",
-                    null
-            );
-        }
-
-
-        if (user.getMobileVerified()) {
-
-            return new ApiResponse<>(
-                    false,
-                    "Mobile number is already verified",
-                    null
-            );
-        }
-
-
-        GenerateOtpRequest request =
-                new GenerateOtpRequest();
-
-        request.setUserId(
-                user.getUserId()
-        );
-
-        request.setDestination(
-                user.getMobile()
-        );
-
-        request.setOtpType(
-                OtpType.MOBILE
-        );
-
-
-        try {
-
-            otpServiceClient.resendMobileOtp(
-                    request
+    // Helper method called here
+    String tradingPlatform =
+            getTradingPlatformName(
+                    user.getTradingPlatformId()
             );
 
-            return new ApiResponse<>(
-                    true,
-                    "Mobile OTP resent successfully",
-                    null
+    UserProfileResponse response =
+            new UserProfileResponse(
+                    user.getUserId(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getMobile(),
+                    user.getTradingPlatformId(),
+                    tradingPlatform
             );
 
-        } catch (Exception e) {
+    return new ApiResponse<>(
+            true,
+            "User profile loaded",
+            response
+    );
+}
 
-            return new ApiResponse<>(
-                    false,
-                    "Unable to resend mobile OTP",
-                    null
-            );
-        }
+// =====================================================
+// HELPER METHOD
+// =====================================================
+// This method converts Trading Platform ID
+// into Trading Platform Name.
+//
+// 101 = GROWW
+// 102 = ZERODHA
+// 103 = ANGEL_ONE
+// 104 = UPSTOX
+//
+// Called from:
+// 1. register()
+// 2. getCurrentUser()
+// =====================================================
+
+private String getTradingPlatformName(
+        Long tradingPlatformId) {
+
+    if (tradingPlatformId == null) {
+        return "UNKNOWN";
     }
 
+    switch (tradingPlatformId.intValue()) {
 
-    // =====================================================
-    // RESEND EMAIL OTP
-    // =====================================================
+        case 101:
+            return "GROWW";
 
-    public ApiResponse<?> resendEmailOtp(
-            String userId) {
+        case 102:
+            return "ZERODHA";
 
-        User user = userRepository
-                .findByUserId(userId)
-                .orElse(null);
+        case 103:
+            return "ANGEL_ONE";
 
+        case 104:
+            return "UPSTOX";
 
-        if (user == null) {
-
-            return new ApiResponse<>(
-                    false,
-                    "User not found",
-                    null
-            );
-        }
-
-
-        if (!user.getMobileVerified()) {
-
-            return new ApiResponse<>(
-                    false,
-                    "Mobile number must be verified first",
-                    null
-            );
-        }
-
-
-        if (user.getEmailVerified()) {
-
-            return new ApiResponse<>(
-                    false,
-                    "Email is already verified",
-                    null
-            );
-        }
-
-
-        GenerateOtpRequest request =
-                new GenerateOtpRequest();
-
-        request.setUserId(
-                user.getUserId()
-        );
-
-        request.setDestination(
-                user.getEmail()
-        );
-
-        request.setOtpType(
-                OtpType.EMAIL
-        );
-
-
-        try {
-
-            otpServiceClient.resendEmailOtp(
-                    request
-            );
-
-            return new ApiResponse<>(
-                    true,
-                    "Email OTP resent successfully",
-                    null
-            );
-
-        } catch (Exception e) {
-
-            return new ApiResponse<>(
-                    false,
-                    "Unable to resend email OTP",
-                    null
-            );
-        }
-    }
-
-
-    // =====================================================
-    // LOGIN
-    // =====================================================
-
-    public ApiResponse<LoginResponse> login(
-            LoginRequest request) {
-
-        User user = userRepository
-                .findByEmail(request.getEmail())
-                .orElse(null);
-
-
-        if (user == null) {
-
-            return new ApiResponse<>(
-                    false,
-                    "Invalid email or password",
-                    null
-            );
-        }
-
-
-        // Check password
-        if (!passwordEncoder.matches(
-                request.getPassword(),
-                user.getPasswordHash())) {
-
-            return new ApiResponse<>(
-                    false,
-                    "Invalid email or password",
-                    null
-            );
-        }
-
-
-        // User must complete verification
-        if (!user.getMobileVerified()
-                || !user.getEmailVerified()) {
-
-            return new ApiResponse<>(
-                    false,
-                    "Please complete mobile and email verification",
-                    null
-            );
-        }
-
-
-        // Check account status
-        if (user.getStatus() != UserStatus.ACTIVE) {
-
-            return new ApiResponse<>(
-                    false,
-                    "User account is not active",
-                    null
-            );
-        }
-
-
-        // ================================================
-        // Generate JWT
-        // ================================================
-
-        String accessToken =
-                jwtService.generateAccessToken(
-                        user.getUserId(),
-                        user.getEmail()
-                );
-
-
-        LoginResponse loginResponse =
-                new LoginResponse(
-                        accessToken,
-                        null,
-                        "Bearer",
-                        jwtService.getAccessTokenExpiration()
-                );
-
-
-        return new ApiResponse<>(
-                true,
-                "Login successful",
-                loginResponse
-        );
+        default:
+            return "UNKNOWN";
     }
 }
+
+
+}
+
+//////////////////////////////old code //////////////////////
+//
+//package com.r3vtech.service;
+//
+//import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.stereotype.Service;
+//import org.springframework.transaction.annotation.Transactional;
+//
+//import com.r3vtech.client.NotificationClient;
+//import com.r3vtech.entity.User;
+//import com.r3vtech.entityDTO.ApiResponse;
+//import com.r3vtech.entityDTO.LoginRequest;
+//import com.r3vtech.entityDTO.LoginResponse;
+//import com.r3vtech.entityDTO.RegisterRequest;
+//import com.r3vtech.entityDTO.RegisterResponse;
+//import com.r3vtech.entityDTO.UserProfileResponse;
+//import com.r3vtech.repository.UserRepository;
+//
+//@Service
+//public class AuthService {
+//
+//	// develop By Shubham Bonde
+//	private final UserRepository userRepository;
+//	private final PasswordEncoder passwordEncoder;
+//	private final JwtService jwtService;
+//	private final NotificationClient notificationClient;
+//
+//	public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService,
+//			NotificationClient notificationClient) {
+//
+//		this.userRepository = userRepository;
+//		this.passwordEncoder = passwordEncoder;
+//		this.jwtService = jwtService;
+//		this.notificationClient = notificationClient;
+//	}
+//
+//	// =====================================================
+//	// REGISTER
+//	// =====================================================
+//
+//	@Transactional
+//	public ApiResponse<RegisterResponse> register(RegisterRequest request) {
+//
+//		// =====================================================
+//		// 1. Create User
+//		// =====================================================
+//
+//		User user = new User();
+//
+//		user.setFirstName(request.getFirstName());
+//		user.setMiddleName(request.getMiddleName());
+//		user.setLastName(request.getLastName());
+//		user.setMobile(request.getMobile());
+//		user.setEmail(request.getEmail());
+//
+//		// Never store plain password
+//		user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+//
+//		user.setTradingPlatformId(request.getTradingPlatformId());
+//
+//		user.setMobileVerified(false);
+//		user.setEmailVerified(false);
+//
+//		// =====================================================
+//		// 2. Save User
+//		// =====================================================
+//
+//		User savedUser = userRepository.save(user);
+//
+//		// =====================================================
+//		// 3. Send Registration Email
+//		// =====================================================
+//		// ------------------------------------------------------------------
+//		// =====================================================
+//		// 3.1 Get Trading Platform Name
+//		// =====================================================
+//
+//		String tradingPlatform;
+//
+//		switch (savedUser.getTradingPlatformId().intValue()) {
+//
+//		case 101:
+//			tradingPlatform = "GROWW";
+//			break;
+//
+//		case 102:
+//			tradingPlatform = "ZERODHA";
+//			break;
+//
+//		case 103:
+//			tradingPlatform = "ANGEL_ONE";
+//			break;
+//
+//		case 104:
+//			tradingPlatform = "UPSTOX";
+//			break;
+//
+//		default:
+//			tradingPlatform = "UNKNOWN";
+//		}
+//
+//		// =====================================================
+//		// 4. Send Registration Email
+//		// =====================================================
+//
+//		try {
+//
+//			String emailBody = String.format("""
+//					Welcome to R3 Trading!
+//
+//					Your account has been created successfully.
+//
+//					-------------------------------------------------
+//					User Information
+//					-------------------------------------------------
+//
+//					ID                  : %d
+//					User ID             : %s
+//					First Name          : %s
+//					Middle Name         : %s
+//					Last Name           : %s
+//					Mobile              : %s
+//					Email               : %s
+//					Trading Platform ID : %d
+//					Trading Platform    : %s
+//
+//					------------------------------------------------
+//
+//					Thank you for registering with R3 Trading.
+//
+//					Regards,
+//					R3 Trading Team
+//					""",
+//
+//					savedUser.getId(), savedUser.getUserId(), savedUser.getFirstName(), savedUser.getMiddleName(),
+//					savedUser.getLastName(), savedUser.getMobile(), savedUser.getEmail(),
+//					savedUser.getTradingPlatformId(), tradingPlatform);
+//
+//			notificationClient.sendEmail(savedUser.getEmail(), "R3 Trading - Registration Successful", emailBody);
+//
+//		} catch (Exception e) {
+//
+//			System.err.println("Notification-Service error: " + e.getMessage());
+//		}
+//
+////------------------------------------------------------------------    
+////
+////        try {
+////
+////            notificationClient.sendEmail(
+////                    savedUser.getEmail(),
+////                    "Registration Successful",
+////                    "Welcome! Your account has been created successfully."
+////            );
+////
+////        } catch (Exception e) {
+////
+////            // Do not fail registration just because
+////            // Notification-Service is temporarily unavailable.
+////
+////            System.err.println(
+////                    "Notification-Service error: "
+////                            + e.getMessage()
+////            );
+////        }
+//
+//		// =====================================================
+//		// 4. Registration Response
+//		// =====================================================
+//
+//		RegisterResponse response = new RegisterResponse(savedUser.getUserId(), savedUser.getMobile(),
+//				savedUser.getEmail(), "Registration initiated.");
+//
+//		return new ApiResponse<>(true, "Registration successful. Verification pending.", response);
+//	}
+//
+//	// =====================================================
+//	// LOGIN
+//	// =====================================================
+//
+//	public ApiResponse<LoginResponse> login(LoginRequest request) {
+//
+//		User user = userRepository.findByEmail(request.getEmail()).orElse(null);
+//
+//		// Check password
+//		if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
+//
+//			return new ApiResponse<>(false, "Invalid email or password", null);
+//		}
+//
+//		// Generate JWT
+//		String accessToken = jwtService.generateAccessToken(user.getUserId(), user.getEmail());
+//
+//		LoginResponse loginResponse = new LoginResponse(accessToken, null, "Bearer",
+//				jwtService.getAccessTokenExpiration());
+//
+//		return new ApiResponse<>(true, "Login successful", loginResponse);
+//	}
+//
+//	// =====================================================
+//	// GET CURRENT USER
+//	// =====================================================
+//
+//	public ApiResponse<UserProfileResponse> getCurrentUser(String userId) {
+//
+//		User user = userRepository.findByUserId(userId).orElse(null);
+//
+//		if (user == null) {
+//
+//			return new ApiResponse<>(false, "User not found", null);
+//		}
+//
+//		String tradingPlatform;
+//
+//		switch (user.getTradingPlatformId().intValue()) {
+//
+//		case 101:
+//			tradingPlatform = "GROWW";
+//			break;
+//
+//		case 102:
+//			tradingPlatform = "ZERODHA";
+//			break;
+//
+//		case 103:
+//			tradingPlatform = "ANGEL_ONE";
+//			break;
+//
+//		case 104:
+//			tradingPlatform = "UPSTOX";
+//			break;
+//
+//		default:
+//			tradingPlatform = "UNKNOWN";
+//		}
+//
+//		UserProfileResponse response = new UserProfileResponse(user.getUserId(), user.getFirstName(),
+//				user.getLastName(), user.getEmail(), user.getMobile(), user.getTradingPlatformId(), tradingPlatform);
+//
+//		return new ApiResponse<>(true, "User profile loaded", response);
+//	}
+//}

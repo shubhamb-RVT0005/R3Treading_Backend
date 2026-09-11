@@ -1,0 +1,75 @@
+
+package com.r3vtech.entityDTO;
+
+public class EmailRequest {
+
+    private String to;
+    private String subject;
+    private String message;
+
+    public EmailRequest() {
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+}
+
+
+//package com.r3vtech.entityDTO;
+//
+////public class EmailRequest {
+////
+////}
+////package com.r3vision.dto;
+//
+//public class EmailRequest {
+//
+//    private String to;
+//    private String subject;
+//    private String body;
+//
+//    public String getTo() {
+//        return to;
+//    }
+//
+//    public void setTo(String to) {
+//        this.to = to;
+//    }
+//
+//    public String getSubject() {
+//        return subject;
+//    }
+//
+//    public void setSubject(String subject) {
+//        this.subject = subject;
+//    }
+//
+//    public String getBody() {
+//        return body;
+//    }
+//
+//    public void setBody(String body) {
+//        this.body = body;
+//    }
+//}

@@ -1,10 +1,5 @@
 package com.r3vtech.entityDTO;
 
-//public class VerifyOtpRequest {
-//
-//}
-//package com.r3treading.auth.dto;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 

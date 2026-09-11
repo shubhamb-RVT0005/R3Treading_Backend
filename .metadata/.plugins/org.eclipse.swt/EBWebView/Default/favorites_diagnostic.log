@@ -1,36 +1,126 @@
-2026-09-04 08:49:59.695: [INFO] CurrentProfilePath: D:\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
-2026-09-04 08:49:59.695: [INFO] Profiles total count: 1
-2026-09-04 08:49:59.695: [INFO] Profile: name=Profile 1 path=D:\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=null
-2026-09-04 08:49:59.695: [INFO] LastUsedProfileDir: D:\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
-2026-09-04 08:49:59.695: [INFO] OnDoneLoading sync enabled: 0
-2026-09-04 08:49:59.695: [INFO] BookmarkModelLoaded, ids_reassigned: 0
-2026-09-04 08:49:59.695: [INFO] BookmarksLoadDropped droppedNodes=0
-2026-09-04 08:49:59.695: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
-2026-09-04 09:11:47.372: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
-2026-09-04 10:05:06.957: [INFO] CurrentProfilePath: D:\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
-2026-09-04 10:05:06.957: [INFO] Profiles total count: 1
-2026-09-04 10:05:06.957: [INFO] Profile: name=Profile 1 path=D:\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=null
-2026-09-04 10:05:06.957: [INFO] LastUsedProfileDir: D:\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
-2026-09-04 10:05:06.957: [INFO] OnDoneLoading sync enabled: 0
-2026-09-04 10:05:06.957: [INFO] BookmarkModelLoaded, ids_reassigned: 0
-2026-09-04 10:05:06.957: [INFO] BookmarksLoadDropped droppedNodes=0
-2026-09-04 10:05:06.957: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
-2026-09-04 10:27:13.620: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
-2026-09-04 10:46:11.540: [INFO] CurrentProfilePath: D:\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
-2026-09-04 10:46:11.540: [INFO] Profiles total count: 1
-2026-09-04 10:46:11.540: [INFO] Profile: name=Profile 1 path=D:\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=null
-2026-09-04 10:46:11.540: [INFO] LastUsedProfileDir: D:\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
-2026-09-04 10:46:11.540: [INFO] OnDoneLoading sync enabled: 0
-2026-09-04 10:46:11.540: [INFO] BookmarkModelLoaded, ids_reassigned: 0
-2026-09-04 10:46:11.540: [INFO] BookmarksLoadDropped droppedNodes=0
-2026-09-04 10:46:11.540: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
-2026-09-04 10:46:18.094: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
-2026-09-04 10:46:33.761: [INFO] CurrentProfilePath: D:\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
-2026-09-04 10:46:33.761: [INFO] Profiles total count: 1
-2026-09-04 10:46:33.761: [INFO] Profile: name=Profile 1 path=D:\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=null
-2026-09-04 10:46:33.761: [INFO] LastUsedProfileDir: D:\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
-2026-09-04 10:46:33.762: [INFO] OnDoneLoading sync enabled: 0
-2026-09-04 10:46:33.762: [INFO] BookmarkModelLoaded, ids_reassigned: 0
-2026-09-04 10:46:33.762: [INFO] BookmarksLoadDropped droppedNodes=0
-2026-09-04 10:46:33.762: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
-2026-09-04 12:22:48.908: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-10 07:55:01.503: [INFO] CurrentProfilePath: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-10 07:55:01.503: [INFO] Profiles total count: 1
+2026-09-10 07:55:01.503: [INFO] Profile: name=Profile 1 path=D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=null
+2026-09-10 07:55:01.503: [INFO] LastUsedProfileDir: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-10 07:55:01.503: [INFO] OnDoneLoading sync enabled: 0
+2026-09-10 07:55:01.503: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-09-10 07:55:01.503: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-09-10 07:55:01.503: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-10 07:55:08.122: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-10 08:01:33.212: [INFO] CurrentProfilePath: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-10 08:01:33.212: [INFO] Profiles total count: 1
+2026-09-10 08:01:33.212: [INFO] Profile: name=Profile 1 path=D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=null
+2026-09-10 08:01:33.212: [INFO] LastUsedProfileDir: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-10 08:01:33.212: [INFO] OnDoneLoading sync enabled: 0
+2026-09-10 08:01:33.212: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-09-10 08:01:33.212: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-09-10 08:01:33.212: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-10 08:02:30.974: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-10 08:02:31.075: [INFO] CurrentProfilePath: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-10 08:02:31.075: [INFO] Profiles total count: 1
+2026-09-10 08:02:31.075: [INFO] Profile: name=Profile 1 path=D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=null
+2026-09-10 08:02:31.075: [INFO] LastUsedProfileDir: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-10 08:02:31.075: [INFO] OnDoneLoading sync enabled: 0
+2026-09-10 08:02:31.075: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-09-10 08:02:31.075: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-09-10 08:02:31.075: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-10 08:02:34.615: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-10 08:02:34.725: [INFO] CurrentProfilePath: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-10 08:02:34.725: [INFO] Profiles total count: 1
+2026-09-10 08:02:34.725: [INFO] Profile: name=Profile 1 path=D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=null
+2026-09-10 08:02:34.725: [INFO] LastUsedProfileDir: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-10 08:02:34.725: [INFO] OnDoneLoading sync enabled: 0
+2026-09-10 08:02:34.725: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-09-10 08:02:34.725: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-09-10 08:02:34.725: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-10 08:02:37.629: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-10 08:02:37.731: [INFO] CurrentProfilePath: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-10 08:02:37.731: [INFO] Profiles total count: 1
+2026-09-10 08:02:37.731: [INFO] Profile: name=Profile 1 path=D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=null
+2026-09-10 08:02:37.731: [INFO] LastUsedProfileDir: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-10 08:02:37.731: [INFO] OnDoneLoading sync enabled: 0
+2026-09-10 08:02:37.731: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-09-10 08:02:37.731: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-09-10 08:02:37.731: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-10 08:03:46.443: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-10 08:03:46.557: [INFO] CurrentProfilePath: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-10 08:03:46.557: [INFO] Profiles total count: 1
+2026-09-10 08:03:46.557: [INFO] Profile: name=Profile 1 path=D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=null
+2026-09-10 08:03:46.557: [INFO] LastUsedProfileDir: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-10 08:03:46.557: [INFO] OnDoneLoading sync enabled: 0
+2026-09-10 08:03:46.557: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-09-10 08:03:46.557: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-09-10 08:03:46.557: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-10 08:06:12.925: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-10 08:06:13.046: [INFO] CurrentProfilePath: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-10 08:06:13.046: [INFO] Profiles total count: 1
+2026-09-10 08:06:13.046: [INFO] Profile: name=Profile 1 path=D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=null
+2026-09-10 08:06:13.046: [INFO] LastUsedProfileDir: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-10 08:06:13.046: [INFO] OnDoneLoading sync enabled: 0
+2026-09-10 08:06:13.046: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-09-10 08:06:13.046: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-09-10 08:06:13.046: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-10 08:06:14.773: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-10 08:06:17.187: [INFO] CurrentProfilePath: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-10 08:06:17.187: [INFO] Profiles total count: 1
+2026-09-10 08:06:17.187: [INFO] Profile: name=Profile 1 path=D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=null
+2026-09-10 08:06:17.187: [INFO] LastUsedProfileDir: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-10 08:06:17.187: [INFO] OnDoneLoading sync enabled: 0
+2026-09-10 08:06:17.187: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-09-10 08:06:17.187: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-09-10 08:06:17.187: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-10 09:52:46.559: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-10 10:06:30.178: [INFO] CurrentProfilePath: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-10 10:06:30.178: [INFO] Profiles total count: 1
+2026-09-10 10:06:30.178: [INFO] Profile: name=Profile 1 path=D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=null
+2026-09-10 10:06:30.178: [INFO] LastUsedProfileDir: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-10 10:06:30.178: [INFO] OnDoneLoading sync enabled: 0
+2026-09-10 10:06:30.178: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-09-10 10:06:30.178: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-09-10 10:06:30.178: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-10 12:27:56.069: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-11 04:41:05.364: [INFO] CurrentProfilePath: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-11 04:41:05.364: [INFO] Profiles total count: 1
+2026-09-11 04:41:05.364: [INFO] Profile: name=Profile 1 path=D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=null
+2026-09-11 04:41:05.364: [INFO] LastUsedProfileDir: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-11 04:41:05.364: [INFO] OnDoneLoading sync enabled: 0
+2026-09-11 04:41:05.364: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-09-11 04:41:05.364: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-09-11 04:41:05.364: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-11 05:13:52.134: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-11 05:35:05.802: [INFO] CurrentProfilePath: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-11 05:35:05.802: [INFO] Profiles total count: 1
+2026-09-11 05:35:05.802: [INFO] Profile: name=Profile 1 path=D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=null
+2026-09-11 05:35:05.802: [INFO] LastUsedProfileDir: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-11 05:35:05.802: [INFO] OnDoneLoading sync enabled: 0
+2026-09-11 05:35:05.802: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-09-11 05:35:05.802: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-09-11 05:35:05.802: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-11 05:44:49.827: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-11 05:56:50.690: [INFO] CurrentProfilePath: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-11 05:56:50.690: [INFO] Profiles total count: 1
+2026-09-11 05:56:50.690: [INFO] Profile: name=Profile 1 path=D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=null
+2026-09-11 05:56:50.690: [INFO] LastUsedProfileDir: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-11 05:56:50.690: [INFO] OnDoneLoading sync enabled: 0
+2026-09-11 05:56:50.690: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-09-11 05:56:50.690: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-09-11 05:56:50.690: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-11 05:57:02.199: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-11 05:57:36.797: [INFO] CurrentProfilePath: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-11 05:57:36.797: [INFO] Profiles total count: 1
+2026-09-11 05:57:36.797: [INFO] Profile: name=Profile 1 path=D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=null
+2026-09-11 05:57:36.797: [INFO] LastUsedProfileDir: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-11 05:57:36.797: [INFO] OnDoneLoading sync enabled: 0
+2026-09-11 05:57:36.797: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-09-11 05:57:36.797: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-09-11 05:57:36.797: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-11 05:57:45.638: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-11 05:57:45.748: [INFO] CurrentProfilePath: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-11 05:57:45.749: [INFO] Profiles total count: 1
+2026-09-11 05:57:45.749: [INFO] Profile: name=Profile 1 path=D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default lastActive=null
+2026-09-11 05:57:45.749: [INFO] LastUsedProfileDir: D:\New folder\R3Trading\.metadata\.plugins\org.eclipse.swt\EBWebView\Default
+2026-09-11 05:57:45.749: [INFO] OnDoneLoading sync enabled: 0
+2026-09-11 05:57:45.749: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-09-11 05:57:45.749: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-09-11 05:57:45.749: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-11 07:33:22.886: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1

@@ -1,0 +1,8 @@
+package com.r3vision.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.r3vision.entity.NotificationLog;
+
+public interface NotificationLogRepository extends JpaRepository<NotificationLog, Long> {
+}

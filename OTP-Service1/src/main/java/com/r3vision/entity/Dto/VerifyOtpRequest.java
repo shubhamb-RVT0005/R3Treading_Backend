@@ -1,0 +1,50 @@
+package com.r3vision.entity.Dto;
+
+import com.r3vision.entity.enums.OtpType;
+
+//public class VerifyOtpRequest {
+//
+//}
+//package com.r3vtech.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public class VerifyOtpRequest {
+
+    @NotBlank
+    private String userId;
+
+    @NotBlank
+    private String otp;
+
+    @NotNull
+    private OtpType otpType;
+
+    public VerifyOtpRequest() {
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
+
+    public OtpType getOtpType() {
+        return otpType;
+    }
+
+    public void setOtpType(OtpType otpType) {
+        this.otpType = otpType;
+    }
+}

@@ -1,9 +1,6 @@
 package com.r3vtech.entityDTO;
 
-//public class ApiResponse {
-//
-//}
-//package com.r3treading.auth.dto;
+
 
 public class ApiResponse<T> {
 

@@ -1,0 +1,5 @@
+package com.r3vision.enums;
+
+public enum NotificationType {
+
+}

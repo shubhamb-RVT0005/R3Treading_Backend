@@ -11,6 +11,8 @@
             <entry path="null"/>
         </endorsedDirs>
     </libraryInfo>
+    <libraryInfo home="D:\VEL 23 july 22\sts-4.16.0.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.4.v20220903-1038" version="17.0.4.1"/>
+    <libraryInfo home="D:\VEL 23 july 22\sts-4.16.0.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.4.v20220903-1038\jre" version="17.0.4.1"/>
     <libraryInfo home="C:\Program Files\Java\jdk-21.0.12.1" version="21.0.12.1"/>
     <libraryInfo home="D:\ShubhamB\JAVA\IDE\sts-5.3.0.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_25.0.3.v20260715-1121\jre" version="25.0.3"/>
 </libraryInfos>

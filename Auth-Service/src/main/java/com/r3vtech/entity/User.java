@@ -1,5 +1,10 @@
 package com.r3vtech.entity;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import com.r3vtech.enums.UserStatus;
+
 //public class User {
 //
 //}
@@ -16,11 +21,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import com.r3vtech.enums.UserStatus;
 
 @Entity
 @Table(name = "users")
@@ -42,10 +42,12 @@ public class User {
     @Column(name = "last_name", nullable = false, length = 100)
     private String lastName;
 
-    @Column(name = "mobile", unique = true, nullable = false, length = 15)
+//    @Column(name = "mobile", unique = true, nullable = false, length = 15)
+    @Column(name = "mobile", nullable = false, length = 15)
     private String mobile;
 
-    @Column(name = "email", unique = true, nullable = false, length = 150)
+//    @Column(name = "email", unique = true, nullable = false, length = 150)
+    @Column(name = "email",  nullable = false, length = 50)
     private String email;
 
     @Column(name = "password_hash", nullable = false)

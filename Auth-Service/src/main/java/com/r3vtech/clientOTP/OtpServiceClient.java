@@ -1,12 +1,6 @@
 package com.r3vtech.clientOTP;
 
 import org.springframework.cloud.openfeign.FeignClient;
-
-//public class OtpServiceClient {
-//
-//}
-
-import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 

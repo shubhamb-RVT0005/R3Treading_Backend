@@ -1,0 +1,35 @@
+package com.r3vision.client;
+
+//public class NotificationServiceClient {
+//
+//}
+//package com.r3vtech.client;
+
+//import com.r3vtech.dto.EmailRequest;
+//import com.r3vtech.dto.NotificationResponse;
+//import com.r3vtech.dto.SmsRequest;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.r3vision.entity.Dto.EmailRequest;
+import com.r3vision.entity.Dto.NotificationResponse;
+import com.r3vision.entity.Dto.SmsRequest;
+
+@FeignClient(
+        name = "notification-service",
+        url = "${notification.service.url}"
+)
+public interface NotificationServiceClient {
+
+    @PostMapping("/notification/email")
+    NotificationResponse sendEmail(
+            @RequestBody EmailRequest request
+    );
+
+    @PostMapping("/notification/sms")
+    NotificationResponse sendSms(
+            @RequestBody SmsRequest request
+    );
+}

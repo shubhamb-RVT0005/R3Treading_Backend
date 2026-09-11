@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename compilation unit &apos;com.r3vtech.config.RestClient.java&apos; to &apos;RestClientConfig.java&apos;&#x0D;&#x0A;- Original project: &apos;Auth-Service&apos;&#x0D;&#x0A;- Original element: &apos;com.r3vtech.config.RestClient.java&apos;&#x0D;&#x0A;- Renamed element: &apos;com.r3vtech.config.RestClientConfig.java&apos;" description="Rename compilation unit &apos;RestClient.java&apos;" flags="2" id="org.eclipse.jdt.ui.rename.compilationunit" input="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.r3vtech.config{RestClient.java" name="RestClientConfig.java" references="false" stamp="1788890258624" version="1.0"/>
+</session>

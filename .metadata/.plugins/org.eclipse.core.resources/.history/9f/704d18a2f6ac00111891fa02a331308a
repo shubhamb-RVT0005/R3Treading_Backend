@@ -1,0 +1,334 @@
+
+package com.r3vtech.service;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.r3vtech.client.NotificationClient;
+import com.r3vtech.entity.User;
+import com.r3vtech.entityDTO.ApiResponse;
+import com.r3vtech.entityDTO.LoginRequest;
+import com.r3vtech.entityDTO.LoginResponse;
+import com.r3vtech.entityDTO.RegisterRequest;
+import com.r3vtech.entityDTO.RegisterResponse;
+import com.r3vtech.entityDTO.UserProfileResponse;
+import com.r3vtech.repository.UserRepository;
+
+@Service
+public class AuthService {
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final NotificationClient notificationClient;
+
+    public AuthService(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            JwtService jwtService,
+            NotificationClient notificationClient) {
+
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
+        this.notificationClient = notificationClient;
+    }
+
+    // =====================================================
+    // REGISTER
+    // =====================================================
+
+    @Transactional
+    public ApiResponse<RegisterResponse> register(
+            RegisterRequest request) {
+
+        // =====================================================
+        // 1. Create User
+        // =====================================================
+
+        User user = new User();
+
+        user.setFirstName(request.getFirstName());
+        user.setMiddleName(request.getMiddleName());
+        user.setLastName(request.getLastName());
+        user.setMobile(request.getMobile());
+        user.setEmail(request.getEmail());
+
+        // Never store plain password
+        user.setPasswordHash(
+                passwordEncoder.encode(request.getPassword())
+        );
+
+        user.setTradingPlatformId(
+                request.getTradingPlatformId()
+        );
+
+        user.setMobileVerified(false);
+        user.setEmailVerified(false);
+
+        // =====================================================
+        // 2. Save User
+        // =====================================================
+
+        User savedUser = userRepository.save(user);
+
+        // =====================================================
+        // 3. Send Registration Email
+        // =====================================================
+//      --------------------------------------------------------------------------------------
+
+     // =====================================================
+     // Get Trading Platform
+     // =====================================================
+
+//     TradingPlatform platform = tradingPlatformRepository
+//             .findById(savedUser.getTradingPlatformId())
+//             .orElseThrow(() ->
+//                     new RuntimeException(
+//                             "Trading platform not found: "
+//                                     + savedUser.getTradingPlatformId()
+//                     ));
+        String tradingPlatform;
+
+        switch (savedUser.getTradingPlatformId().intValue()) {
+
+            case 101:
+                tradingPlatform = "GROWW";
+                break;
+
+            case 102:
+                tradingPlatform = "ZERODHA";
+                break;
+
+            case 103:
+                tradingPlatform = "ANGEL_ONE";
+                break;
+
+            case 104:
+                tradingPlatform = "UPSTOX";
+                break;
+
+            default:
+                tradingPlatform = "UNKNOWN";
+        }
+
+     // =====================================================
+     // Build User Profile Response
+     // =====================================================
+
+     UserProfileResponse response = new UserProfileResponse(
+             savedUser.getUserId(),
+             savedUser.getFirstName(),
+             savedUser.getLastName(),
+             savedUser.getEmail(),
+             savedUser.getMobile(),
+             savedUser.getTradingPlatformId(),
+             platform.getName()
+     );
+
+     // =====================================================
+     // Registration Email
+     // =====================================================
+
+     try {
+
+         String emailBody = String.format(
+                 """
+                 Welcome to R3 Trading!
+
+                 Your account has been created successfully.
+
+                 ------------------------------
+                 User Information
+                 ------------------------------
+
+                 ID                  : %d
+                 User ID             : %s
+                 First Name          : %s
+                 Last Name           : %s
+                 Mobile              : %s
+                 Email               : %s
+                 Trading Platform ID : %d
+                 Trading Platform    : %s
+
+                 ------------------------------
+
+                 Thank you for registering with R3 Trading.
+
+                 Regards,
+                 R3 Trading Team
+                 """,
+                 savedUser.getId(),
+                 savedUser.getUserId(),
+                 savedUser.getFirstName(),
+                 savedUser.getLastName(),
+                 savedUser.getMobile(),
+                 savedUser.getEmail(),
+                 savedUser.getTradingPlatformId(),
+                 platform.getName()
+         );
+
+         notificationClient.sendEmail(
+                 savedUser.getEmail(),
+                 "R3 Trading - Registration Successful",
+                 emailBody
+         );
+
+     } catch (Exception e) {
+
+         System.err.println(
+                 "Failed to send registration email: "
+                         + e.getMessage()
+         );
+     }
+
+//------------------------------------------------------------------    
+//
+//        try {
+//
+//            notificationClient.sendEmail(
+//                    savedUser.getEmail(),
+//                    "Registration Successful",
+//                    "Welcome! Your account has been created successfully."
+//            );
+//
+//        } catch (Exception e) {
+//
+//            // Do not fail registration just because
+//            // Notification-Service is temporarily unavailable.
+//
+//            System.err.println(
+//                    "Notification-Service error: "
+//                            + e.getMessage()
+//            );
+//        }
+
+        // =====================================================
+        // 4. Registration Response
+        // =====================================================
+
+        RegisterResponse response =
+                new RegisterResponse(
+                        savedUser.getUserId(),
+                        savedUser.getMobile(),
+                        savedUser.getEmail(),
+                        "Registration initiated."
+                );
+
+        return new ApiResponse<>(
+                true,
+                "Registration successful. Verification pending.",
+                response
+        );
+    }
+
+    // =====================================================
+    // LOGIN
+    // =====================================================
+
+    public ApiResponse<LoginResponse> login(
+            LoginRequest request) {
+
+        User user = userRepository
+                .findByEmail(request.getEmail())
+                .orElse(null);
+
+        // Check password
+        if (user == null ||
+                !passwordEncoder.matches(
+                        request.getPassword(),
+                        user.getPasswordHash())) {
+
+            return new ApiResponse<>(
+                    false,
+                    "Invalid email or password",
+                    null
+            );
+        }
+
+        // Generate JWT
+        String accessToken =
+                jwtService.generateAccessToken(
+                        user.getUserId(),
+                        user.getEmail()
+                );
+
+        LoginResponse loginResponse =
+                new LoginResponse(
+                        accessToken,
+                        null,
+                        "Bearer",
+                        jwtService.getAccessTokenExpiration()
+                );
+
+        return new ApiResponse<>(
+                true,
+                "Login successful",
+                loginResponse
+        );
+    }
+
+    // =====================================================
+    // GET CURRENT USER
+    // =====================================================
+
+    public ApiResponse<UserProfileResponse> getCurrentUser(
+            String userId) {
+
+        User user = userRepository
+                .findByUserId(userId)
+                .orElse(null);
+
+        if (user == null) {
+
+            return new ApiResponse<>(
+                    false,
+                    "User not found",
+                    null
+            );
+        }
+
+        String tradingPlatform;
+
+        switch (user.getTradingPlatformId().intValue()) {
+
+            case 101:
+                tradingPlatform = "GROWW";
+                break;
+
+            case 102:
+                tradingPlatform = "ZERODHA";
+                break;
+
+            case 103:
+                tradingPlatform = "ANGEL_ONE";
+                break;
+
+            case 104:
+                tradingPlatform = "UPSTOX";
+                break;
+
+            default:
+                tradingPlatform = "UNKNOWN";
+        }
+
+        UserProfileResponse response =
+                new UserProfileResponse(
+                        user.getUserId(),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getEmail(),
+                        user.getMobile(),
+                        user.getTradingPlatformId(),
+                        tradingPlatform
+                );
+
+        return new ApiResponse<>(
+                true,
+                "User profile loaded",
+                response
+        );
+    }
+}
+

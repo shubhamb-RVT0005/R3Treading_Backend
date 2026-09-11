@@ -1,10 +1,5 @@
 package com.r3vtech.entityDTO;
 
-//public class LoginResponse {
-//
-//}
-//package com.r3treading.auth.dto;
-
 public class LoginResponse {
 
     private String accessToken;

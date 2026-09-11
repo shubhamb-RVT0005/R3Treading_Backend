@@ -1,0 +1,244 @@
+package com.r3vtech.entity;
+
+//public class User {
+//
+//}
+//package com.r3treading.auth.entity;
+
+//import com.r3treading.auth.enums.UserStatus;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import com.r3vtech.enums.UserStatus;
+
+@Entity
+@Table(name = "users")
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "user_id", unique = true, nullable = false, length = 50)
+    private String userId;
+
+    @Column(name = "first_name", nullable = false, length = 100)
+    private String firstName;
+
+    @Column(name = "middle_name", length = 100)
+    private String middleName;
+
+    @Column(name = "last_name", nullable = false, length = 100)
+    private String lastName;
+
+//    @Column(name = "mobile", unique = true, nullable = false, length = 15)
+    @Column(name = "mobile", nullable = false, length = 15)
+    private String mobile;
+
+//    @Column(name = "email", unique = true, nullable = false, length = 150)
+    @Column(name = "email",  nullable = false, length = 50)
+    private String email;
+
+    @Column(name = "password_hash", nullable = false)
+    private String passwordHash;
+
+    /**
+     * Trading Platform Master ID
+     *
+     * 101 = Groww
+     * 102 = Upstox
+     * 103 = Angel One
+     */
+    @Column(name = "trading_platform_id", nullable = false)
+    private Long tradingPlatformId;
+
+    @Column(name = "mobile_verified", nullable = false)
+    private Boolean mobileVerified = false;
+
+    @Column(name = "email_verified", nullable = false)
+    private Boolean emailVerified = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 30)
+    private UserStatus status;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+
+    @PrePersist
+    protected void onCreate() {
+
+        if (this.userId == null || this.userId.isBlank()) {
+            this.userId = "USR-" + UUID.randomUUID()
+                    .toString()
+                    .substring(0, 8)
+                    .toUpperCase();
+        }
+
+        if (this.mobileVerified == null) {
+            this.mobileVerified = false;
+        }
+
+        if (this.emailVerified == null) {
+            this.emailVerified = false;
+        }
+
+        if (this.status == null) {
+            this.status = UserStatus.PENDING_VERIFICATION;
+        }
+
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+
+    // =========================
+    // Getters and Setters
+    // =========================
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+
+    public Long getTradingPlatformId() {
+        return tradingPlatformId;
+    }
+
+    public void setTradingPlatformId(Long tradingPlatformId) {
+        this.tradingPlatformId = tradingPlatformId;
+    }
+
+
+    public Boolean getMobileVerified() {
+        return mobileVerified;
+    }
+
+    public void setMobileVerified(Boolean mobileVerified) {
+        this.mobileVerified = mobileVerified;
+    }
+
+
+    public Boolean getEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(Boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
+    }
+
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+}

@@ -1,10 +1,5 @@
 package com.r3vtech.entityDTO;
 
-//public class RegisterResponse {
-//
-//}
-//package com.r3treading.auth.dto;
-
 public class RegisterResponse {
 
     private String userId;

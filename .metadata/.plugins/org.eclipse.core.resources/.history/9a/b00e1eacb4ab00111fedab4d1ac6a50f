@@ -1,0 +1,29 @@
+package com.r3vtech.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestClient;
+
+//import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+
+@Configuration
+public class RestClientConfig {
+
+    @Bean
+    public RestClient restClient() {
+        return RestClient.builder().build();
+    }
+}
+
+
+//
+//
+//@Configuration
+//public class RestClientConfig {
+//
+//    @Bean
+//    @LoadBalanced
+//    public RestClient.Builder restClientBuilder() {
+//        return RestClient.builder();
+//    }
+//}
